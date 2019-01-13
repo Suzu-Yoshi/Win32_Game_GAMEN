@@ -62,8 +62,8 @@ VOID MY_DRAW_BACKSCREEN(HDC hdc_double, RECT rect)
 	//ブラシを作成
 	HBRUSH hbrush = CreateSolidBrush(RGB(0, 255, 0));
 
-	//ブラシを設定
-	SelectObject(hdc_double, hbrush);
+	//ブラシを設定＆以前のブラシを取得
+	HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc_double, hbrush);
 
 	//四角を描画
 	Rectangle(
@@ -72,6 +72,9 @@ VOID MY_DRAW_BACKSCREEN(HDC hdc_double, RECT rect)
 		rect.top,		//四角の左上のY座標
 		rect.right,		//四角の右下のX座標
 		rect.bottom);	//四角の右下のY座標
+
+	//以前のブラシに戻す
+	SelectObject(hdc_double, hOldBrush);
 
 	//ブラシを削除
 	DeleteObject(hbrush);
@@ -100,17 +103,11 @@ VOID MY_DRAW_LINE_TATE(HDC hdc_double, RECT rect)
 	pt_End.x = rect.left;
 	pt_End.y = rect.bottom;
 
-	//ペン：線を引く色、太さなどを設定
-	HPEN hpen;
-
 	//ペンを作成
-	hpen = CreatePen(
-		PS_SOLID,				//ペンのタイプ
-		3,						//ペンの太さ
-		RGB(0, 0, 0));	//ペンの色
+	HPEN hpen = CreatePen(PS_SOLID, 3, RGB(0, 0, 0));
 
-	//ペンを設定
-	SelectObject(hdc_double, hpen);
+	//ペンを設定＆以前のペンを取得
+	HPEN hOldPen = (HPEN)SelectObject(hdc_double, hpen);
 
 	for (loop = 0; loop < Draw_Line_MAX; loop++)
 	{
@@ -118,7 +115,7 @@ VOID MY_DRAW_LINE_TATE(HDC hdc_double, RECT rect)
 		//線の描き始め位置
 		MoveToEx(
 			hdc_double,							//デバイスコンテキストのハンドル
-			pt_Start.x + loop* GAME_kankaku,	//描き始めるX座標
+			pt_Start.x + loop * GAME_kankaku,	//描き始めるX座標
 			pt_Start.y,							//描き始めるY座標
 			NULL);								//以前のカレントポジション/必要ないならNULL
 
@@ -129,7 +126,10 @@ VOID MY_DRAW_LINE_TATE(HDC hdc_double, RECT rect)
 			pt_End.y);						//描き終わるY座標
 	}
 
-	//ブラシを削除
+	//以前のペンに戻す
+	SelectObject(hdc_double, hOldPen);
+
+	//ペンを削除
 	DeleteObject(hpen);
 }
 
@@ -155,17 +155,11 @@ VOID MY_DRAW_LINE_YOKO(HDC hdc_double, RECT rect)
 	pt_End.x = rect.right;
 	pt_End.y = rect.top;
 
-	//ペン：線を引く色、太さなどを設定
-	HPEN hpen;
-
 	//ペンを作成
-	hpen = CreatePen(
-		PS_SOLID,				//ペンのタイプ
-		3,						//ペンの太さ
-		RGB(0, 0, 0));	//ペンの色
+	HPEN hpen = CreatePen(PS_SOLID, 3, RGB(0, 0, 0));
 
-	//ペンを設定
-	SelectObject(hdc_double, hpen);
+	//ペンを設定＆以前のペンを取得
+	HPEN hOldPen = (HPEN)SelectObject(hdc_double, hpen);
 
 	for (loop = 0; loop < Draw_Line_MAX; loop++)
 	{
@@ -173,17 +167,20 @@ VOID MY_DRAW_LINE_YOKO(HDC hdc_double, RECT rect)
 		//線の描き始め位置
 		MoveToEx(
 			hdc_double,							//デバイスコンテキストのハンドル
-			pt_Start.x ,						//描き始めるX座標
+			pt_Start.x,						//描き始めるX座標
 			pt_Start.y + loop * GAME_kankaku,	//描き始めるY座標
 			NULL);								//以前のカレントポジション/必要ないならNULL
 
 		//線を描く(斜め棒)
 		LineTo(
 			hdc_double,							//デバイスコンテキストのハンドル
-			pt_End.x ,							//描き終わるX座標
+			pt_End.x,							//描き終わるX座標
 			pt_End.y + loop * GAME_kankaku);	//描き終わるY座標
 	}
 
-	//ブラシを削除
+	//以前のペンに戻す
+	SelectObject(hdc_double, hOldPen);
+
+	//ペンを削除
 	DeleteObject(hpen);
 }

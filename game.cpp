@@ -49,6 +49,8 @@ VOID MY_DRAW_GAME(MY_WIN mywin)
 	//‰æ–Ê‚Ì‰¡ü‚ð•`‰æ‚·‚é
 	MY_DRAW_LINE_YOKO(mywin.hdc_double, mywin.win_rect_cli);
 
+	//
+
 }
 
 ///########## ‰æ–Ê‚Ì”wŒi‚ð•`‰æ‚·‚éŠÖ” ##########

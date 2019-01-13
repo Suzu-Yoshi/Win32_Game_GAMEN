@@ -76,11 +76,39 @@ int WINAPI WinMain(
 	//ウィンドウを表示
 	ShowWindow(MyWin.hwnd, SW_SHOW);
 
-	//メッセージを受け取り続ける
-	while (GetMessage(&MyWin.msg, NULL, 0, 0))
+	//無限ループ
+	while (true)
 	{
-		//ウィンドウプロシージャに送る
-		DispatchMessage(&MyWin.msg);
+		//デッドタイム(メッセージが発生していない)か判断する
+		if (PeekMessage(&MyWin.msg, NULL, 0, 0, PM_REMOVE))
+		{
+			//デッドタイムでないとき→メッセージが発生した
+
+			//閉じるボタンを押したときは無限ループから抜ける
+			if (MyWin.msg.message == WM_QUIT)
+			{
+				break;
+			}
+
+			//仮想キーコードを実際の文字に変換する
+			TranslateMessage(&MyWin.msg);
+
+			//メッセージをウィンドウプロシージャに送る
+			DispatchMessage(&MyWin.msg);
+		}
+		else
+		{
+			//デッドタイムであるとき→メッセージが発生していない
+
+			//時間取得
+			MY_FPS_UPDATE();
+
+			//WM_PAINTを発生
+			InvalidateRect(MyWin.hwnd, NULL, FALSE);
+
+			//指定したFPSになるように待つ
+			MY_FPS_WAIT();
+		}
 	}
 
 	return (int)MyWin.msg.wParam;

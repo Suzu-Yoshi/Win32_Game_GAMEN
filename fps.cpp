@@ -19,6 +19,9 @@ BOOL MY_FPS_UPDATE(VOID);
 //指定したFPSになるように待つ関数
 VOID MY_FPS_WAIT(VOID);
 
+//FPSの値を表示する関数
+VOID MY_FPS_DRAW(HDC hdc);
+
 ///########## 指定したFPSになるように待つ関数 ##########
 //引　数：なし
 //戻り値：なし
@@ -62,7 +65,7 @@ BOOL MY_FPS_UPDATE(VOID)
 		MyFPS.fps_end_tm = GetTickCount();
 
 		//平均的なFPS値を計算
-		MyFPS.fps_Show
+		MyFPS.fps_Draw
 			= 1000.0f / ((MyFPS.fps_end_tm - MyFPS.fps_sta_tm) / MyFPS.fps_ave);
 
 		//次のFPS計算の準備
@@ -75,4 +78,40 @@ BOOL MY_FPS_UPDATE(VOID)
 	MyFPS.fps_count++;
 
 	return true;
+}
+
+///########## FPSの値を表示する関数 ##########
+//引　数：デバイスコンテキストのハンドル
+//引　数：なし
+VOID MY_FPS_DRAW(HDC hdc)
+{
+	//FPS値を整形するための変数
+	CHAR strfpsChr[64];
+	size_t wLen = 0;
+	errno_t err = 0;
+
+	//FPS値を整形
+	sprintf(strfpsChr, "FPS：%2.1lf", MyFPS.fps_Draw);
+
+	//FPS値を表示するための変数
+	TCHAR StrfpsTch[64];
+
+	//ロケール指定
+	setlocale(LC_ALL, "japanese");
+
+	//文字列をマルチバイト文字からワイド文字に変換
+	err = mbstowcs_s(
+		&wLen,				//変換された文字数
+		StrfpsTch,			//変換されたワイド文字
+		strlen(strfpsChr),	//変換する文字数
+		strfpsChr,			//変換するマルチバイト文字
+		_TRUNCATE			//バッファに収まるだけの文字列まで変換
+	);
+
+	SetBkMode(hdc, TRANSPARENT);			//背景色は上書きしない
+	SetTextColor(hdc, RGB(0, 0, 0));		//文字色
+	SetBkColor(hdc, RGB(255, 255, 255));	//背景色
+
+	//FPSを描画
+	TextOut(hdc, 0, 0, StrfpsTch, lstrlen(StrfpsTch));
 }

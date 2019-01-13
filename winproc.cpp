@@ -50,37 +50,7 @@ LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 
 		///▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
 
-		//タイマーを10ミリ間隔にセット(開始)
-		SetTimer(hwnd, TIMER_ID_FPS, 10, NULL);
-
 		//ウィンドウを生成するときは、0を返す
-		return 0;
-
-	case WM_TIMER:
-
-		switch (wp)
-		{
-		case TIMER_ID_FPS:
-
-			//画面更新の時刻を取得する
-			MY_FPS_UPDATE();
-
-			///▼▼▼▼▼ ゲーム固有の設定ここから ▼▼▼▼▼
-
-			///▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
-
-			//無効リージョンを発生
-			InvalidateRect(hwnd, NULL, FALSE);
-
-			//画面を、すぐに再描画する
-			UpdateWindow(hwnd);
-
-			//指定したFPSになるように待つ
-			MY_FPS_WAIT();
-
-			break;
-		}
-
 		return 0;
 
 	case WM_PAINT:
@@ -96,6 +66,9 @@ LRESULT CALLBACK MY_WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 
 		//画面の描画
 		MY_DRAW_GAME(MyWin);
+
+		//FPSの数値を描画
+		MY_FPS_DRAW(MyWin.hdc_double);
 
 		///▲▲▲▲▲ ゲーム固有の設定ここまで ▲▲▲▲▲
 

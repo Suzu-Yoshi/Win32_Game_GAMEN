@@ -43,7 +43,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt">
+    <Text Include="ReadMe[Must Edit].txt">
       <Filter>リソース ファイル</Filter>
     </Text>
   </ItemGroup>

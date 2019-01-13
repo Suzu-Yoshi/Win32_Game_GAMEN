@@ -3,7 +3,9 @@
 ///▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
 ///########## ヘッダファイル読み込み ##########
+#include<stdio.h>
 #include <windows.h>
+#include <locale.h>
 
 ///########## マクロ定義 ##########
 
@@ -18,7 +20,7 @@
 //FPSのパラメータ構造体
 struct MY_STRUCT_FPS
 {
-	float		fps_Show;				//表示するFPS
+	float		fps_Draw;				//描画するFPS
 	DWORD		fps_sta_tm;				//0フレーム目の開始時刻
 	DWORD		fps_end_tm;				//設定したフレームの終了時刻
 	DWORD		fps_count;				//フレームのカウント
@@ -52,5 +54,8 @@ extern BOOL MY_FPS_UPDATE(VOID);
 
 //指定したFPSになるように待つ関数
 extern VOID MY_FPS_WAIT(VOID);
+
+//FPSの値を表示する関数
+extern VOID MY_FPS_DRAW(HDC);
 
 ///▲▲▲▲▲ 本体はfps.cpp ▲▲▲▲▲

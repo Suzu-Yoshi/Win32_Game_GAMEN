@@ -76,13 +76,23 @@ int WINAPI WinMain(
 	//ウィンドウを表示
 	ShowWindow(MyWin.hwnd, SW_SHOW);
 
+	/*
+	//ウィンドウクラスを登録できなかったとき
+	if (!RegisterClass(&MyWin.winc))
+	{
+		//メッセージボックスを表示
+		MessageBox(NULL, ERR_MSG_NO_WIN_CLASS, ERR_MSG_TITLE, MB_OK);
+
+		return FALSE;
+	}*/
+
 	//無限ループ
 	while (true)
 	{
-		//デッドタイム(メッセージが発生していない)か判断する
+		//メッセージが「メッセージキュー」にあるか判断する
 		if (PeekMessage(&MyWin.msg, NULL, 0, 0, PM_REMOVE))
 		{
-			//デッドタイムでないとき→メッセージが発生した
+			//メッセージが「メッセージキュー」にあるとき
 
 			//閉じるボタンを押したときは無限ループから抜ける
 			if (MyWin.msg.message == WM_QUIT)
@@ -98,7 +108,7 @@ int WINAPI WinMain(
 		}
 		else
 		{
-			//デッドタイムであるとき→メッセージが発生していない
+			//メッセージが「メッセージキュー」にないとき
 
 			//時間取得
 			MY_FPS_UPDATE();
